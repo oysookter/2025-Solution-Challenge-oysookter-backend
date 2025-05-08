@@ -1,37 +1,40 @@
 package com.oysookter.forestFire.controller;
 
 
+import com.oysookter.forestFire.dto.CoordinateRequest;
+import com.oysookter.forestFire.dto.PredictionResponse;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 
-import java.util.HashMap;
-import java.util.Map;
 
 @RestController
-@RequestMapping("/api/forestfire")
+@RequestMapping("/api")
 public class ForestFireController {
 
 
-    @GetMapping("/coordinates")
-    public ResponseEntity<Map<String, Object>> receiveCoordinatesGet(
-            @RequestParam double longitude,
-            @RequestParam double latitude,
-            @RequestParam(required = false, defaultValue = "25.0") double radiusKm) {
+    @PostMapping("/coordinate")
+    public ResponseEntity<PredictionResponse> receiveCoordinate(@RequestBody CoordinateRequest request) {
+        // FastAPI 주소
+        String fastApiUrl = "http://<FASTAPI_IP>:8000/predict";
 
+        // FastAPI에 요청 보낼 구성
+        RestTemplate restTemplate = new RestTemplate();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<CoordinateRequest> entity = new HttpEntity<>(request, headers);
 
-        // 간단한 응답 맵 생성
-        Map<String, Object> response = new HashMap<>();
-        response.put("status", "success");
-        response.put("message", "Coordinates received");
-        response.put("coordinates", Map.of(
-                "longitude", longitude,
-                "latitude", latitude,
-                "radiusKm", radiusKm
-        ));
+        // FastAPI로 POST 요청하고 JSON 결과를 PredictionResponse로 매핑
+        ResponseEntity<PredictionResponse> response = restTemplate.postForEntity(
+                fastApiUrl,
+                entity,
+                PredictionResponse.class
+        );
 
-        return ResponseEntity.ok(response);
+        // 결과를 그대로 Flutter에 전달
+        return ResponseEntity.ok(response.getBody());
     }
 }
