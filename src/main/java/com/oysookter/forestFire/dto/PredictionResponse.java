@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class PredictionResponse {
-    private double latitude;
-    private double longitude;
-    private String gemini_result;
+    private double lat;
+    private double lon;
+    private String summary;
 }

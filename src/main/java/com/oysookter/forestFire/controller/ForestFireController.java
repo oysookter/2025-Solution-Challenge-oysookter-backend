@@ -15,26 +15,20 @@ import org.springframework.web.client.RestTemplate;
 @RequestMapping("/api")
 public class ForestFireController {
 
-
     @PostMapping("/coordinate")
     public ResponseEntity<PredictionResponse> receiveCoordinate(@RequestBody CoordinateRequest request) {
-        // FastAPI 주소
-        String fastApiUrl = "http://<FASTAPI_IP>:8000/predict";
+        // 받은 좌표
+        double latitude = request.getLatitude();
+        double longitude = request.getLongitude();
 
-        // FastAPI에 요청 보낼 구성
+        // FastAPI 주소: 쿼리 파라미터로 lat, lon 포함
+        String fastApiUrl = String.format("http://172.30.1.87:8000/recovery-summary?lat=%s&lon=%s", latitude, longitude);
+
+        // FastAPI에 GET 요청 (쿼리로 좌표 전달)
         RestTemplate restTemplate = new RestTemplate();
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        HttpEntity<CoordinateRequest> entity = new HttpEntity<>(request, headers);
+        ResponseEntity<PredictionResponse> response = restTemplate.getForEntity(fastApiUrl, PredictionResponse.class);
 
-        // FastAPI로 POST 요청하고 JSON 결과를 PredictionResponse로 매핑
-        ResponseEntity<PredictionResponse> response = restTemplate.postForEntity(
-                fastApiUrl,
-                entity,
-                PredictionResponse.class
-        );
-
-        // 결과를 그대로 Flutter에 전달
+        // 결과를 Flutter에 전달
         return ResponseEntity.ok(response.getBody());
     }
 }
