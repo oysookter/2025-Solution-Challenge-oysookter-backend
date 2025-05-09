@@ -58,7 +58,7 @@ jobs:
         passphrase: ${{ secrets.SSH_PASSPHRASE }}
         envs: GITHUB_SHA
         script: |
-          /home/chanhyejin
+          cd /home/chanhyejin
           sudo docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_PASSWORD }}
           sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_REPOSITORY }}:${GITHUB_SHA::7}
           sudo docker tag ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_REPOSITORY }}:${GITHUB_SHA::7} oysookter
