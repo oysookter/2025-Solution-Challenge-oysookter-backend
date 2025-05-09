@@ -45,6 +45,7 @@ jobs:
     - name: Docker build
       run: |
         docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_PASSWORD }}
-        docker build -f 2025-Solution-Challenge-oysookter-backend/Dockerfile -t immerundewig/oysookter:${GITHUB_SHA::7} 2025-Solution-Challenge-oysookter-backend
+        docker build -t oysookter .
+        docker tag oysookter immerundewig/oysookter:${GITHUB_SHA::7}
         docker push immerundewig/oysookter:${GITHUB_SHA::7}
 
