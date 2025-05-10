@@ -50,7 +50,6 @@ jobs:
         docker push immerundewig/oysookter:latest
         docker push immerundewig/oysookter:${GITHUB_SHA::7}
 
-    # Deploy
     - name: Deploy
       uses: appleboy/ssh-action@v0.1.10
       with:
@@ -62,8 +61,10 @@ jobs:
         script: |
           cd /home/chanhyejin
           sudo docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_PASSWORD }}
-          export IMAGE_TAG=${GITHUB_SHA::7}  # <-- 여기서 환경 변수로 전달
-          sudo docker pull immerundewig/oysookter:$IMAGE_TAG
-          sudo docker-compose down
-          sudo IMAGE_TAG=$IMAGE_TAG docker-compose up -d --force-recreate --no-deps
+          sudo docker pull immerundewig/oysookter:latest   # <-- latest 명시!
+          sudo docker-compose down --rmi all
+          sudo docker system prune -af
+          sudo docker-compose up -d --force-recreate --no-deps
+
+
 
