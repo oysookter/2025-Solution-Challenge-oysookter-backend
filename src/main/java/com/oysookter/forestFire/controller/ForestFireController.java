@@ -13,7 +13,7 @@ import org.springframework.web.client.RestTemplate;
 @RequestMapping("/api")
 public class ForestFireController {
 
-    @PostMapping("/coordinate")
+    @PostMapping("/coordinateit pull")
     public ResponseEntity<PredictionResponse> receiveCoordinate(@RequestBody CoordinateRequest request) {
         double latitude = request.getLatitude();
         double longitude = request.getLongitude();
