@@ -10,7 +10,7 @@ public class HelloController {
 
     @GetMapping("/hello")
     public String hello() {
-        System.out.println("테스트 hello API 호출됨");
+        log.info("테스트 hello API 호출됨");
         return "Hello from Spring Boot!";
     }
 
