@@ -20,7 +20,7 @@ public class SummaryService {
 
     public double callFastApiForDamage(CoordinateRequest request) {
         try {
-            String url = String.format("%s/damage?lat=%s&lon=%s", BASE_URL, request.getLat(), request.getLon());
+            String url = String.format("%s/fire-damage?lat=%s&lon=%s", BASE_URL, request.getLat(), request.getLon());
             log.info("🔥 호출: {}", url);
             ResponseEntity<DamageResponse> response = restTemplate.getForEntity(url, DamageResponse.class);
             return response.getBody() != null ? response.getBody().getDamage() : -1;
@@ -32,7 +32,7 @@ public class SummaryService {
 
     public RecoveryInfo callFastApiForRecovery(CoordinateRequest request) {
         try {
-            String url = String.format("%s/recovery?lat=%s&lon=%s", BASE_URL, request.getLat(), request.getLon());
+            String url = String.format("%s/ndvi-recovery?lat=%s&lon=%s", BASE_URL, request.getLat(), request.getLon());
             log.info("🔥 호출: {}", url);
             ResponseEntity<RecoveryInfo> response = restTemplate.getForEntity(url, RecoveryInfo.class);
             return response.getBody();
