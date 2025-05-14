@@ -26,7 +26,7 @@ public class SummaryController {
         SummaryResponse response = new SummaryResponse();
         response.setLat(request.getLat());
         response.setLon(request.getLon());
-        response.setRecovery(recovery);
+        response.setRecoveryInfo(recovery);
         response.setDamage(damage);
         response.setVegetationInfo(vegetation);
 

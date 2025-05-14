@@ -7,16 +7,22 @@ public class SummaryResponse {
     private double lat;
     private double lon;
     private double damage;
-    private RecoveryInfo recovery;
+    private RecoveryInfo recoveryInfo;
     private VegetationInfo vegetationInfo;
 
     @Data
     public static class RecoveryInfo {
-        private double ndvi_pre;
-        private double ndvi_min;
-        private double ndvi_now;
-        private double recovery_rate;
-        private String status;
+        private Recovery recovery;
+
+        @Data
+        public static class Recovery {
+            private double ndvi_pre;
+            private double ndvi_min;
+            private double ndvi_now;
+            private double recovery_rate;
+            private String status;
+        }
+
     }
 
     @Data
