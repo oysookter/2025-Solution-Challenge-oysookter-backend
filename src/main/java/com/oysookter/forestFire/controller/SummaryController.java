@@ -9,6 +9,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+
 @Slf4j
 @RestController
 @RequestMapping("/api")
@@ -18,17 +21,22 @@ public class SummaryController {
     private final SummaryService summaryService;
 
     @PostMapping("/summary")
-    public ResponseEntity<SummaryResponse> getSummary(@RequestBody CoordinateRequest request) {
-        SummaryResponse.RecoveryInfo recovery = summaryService.callFastApiForRecovery(request);
-        double damage = summaryService.callFastApiForDamage(request);
-        SummaryResponse.VegetationInfo vegetation = summaryService.callFastApiForVegetation(request);
+    public ResponseEntity<SummaryResponse> getSummary(@RequestBody CoordinateRequest request)
+            throws ExecutionException, InterruptedException {
+
+        CompletableFuture<SummaryResponse.RecoveryInfo> recoveryFuture = summaryService.callFastApiForRecovery(request);
+        CompletableFuture<Double> damageFuture = summaryService.callFastApiForDamage(request);
+        CompletableFuture<SummaryResponse.VegetationInfo> vegetationFuture = summaryService.callFastApiForVegetation(request);
+
+        // 모든 작업이 끝날 때까지 대기
+        CompletableFuture.allOf(recoveryFuture, damageFuture, vegetationFuture).join();
 
         SummaryResponse response = new SummaryResponse();
         response.setLat(request.getLat());
         response.setLon(request.getLon());
-        response.setRecoveryInfo(recovery);
-        response.setDamage(damage);
-        response.setVegetationInfo(vegetation);
+        response.setRecoveryInfo(recoveryFuture.get());
+        response.setDamage(damageFuture.get());
+        response.setVegetationInfo(vegetationFuture.get());
 
         return ResponseEntity.ok(response);
     }
