@@ -28,7 +28,7 @@ public class SummaryController {
         response.setLon(request.getLon());
         response.setRecovery(recovery);
         response.setDamage(damage);
-        response.setVegetation(vegetation);
+        response.setVegetationInfo(vegetation);
 
         return ResponseEntity.ok(response);
     }
