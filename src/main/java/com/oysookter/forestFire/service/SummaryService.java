@@ -1,6 +1,7 @@
 package com.oysookter.forestFire.service;
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.oysookter.forestFire.dto.CoordinateRequest;
 import com.oysookter.forestFire.dto.SummaryResponse;
 import com.oysookter.forestFire.dto.SummaryResponse.RecoveryInfo;
@@ -18,6 +19,7 @@ import java.util.concurrent.CompletableFuture;
 public class SummaryService {
 
     private final RestTemplate restTemplate = new RestTemplate();
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     private static final String BASE_URL = "https://oysooktergemini-491188530288.asia-northeast3.run.app";
 
@@ -54,6 +56,13 @@ public class SummaryService {
             String url = String.format("%s/vegetation?lat=%s&lon=%s", BASE_URL, request.getLat(), request.getLon());
             log.info("🔥 호출: {}", url);
             ResponseEntity<VegetationInfo> response = restTemplate.getForEntity(url, VegetationInfo.class);
+
+            if (response.getBody() != null) {
+                log.info("✅ /vegetation 응답: {}", objectMapper.writeValueAsString(response.getBody()));
+            } else {
+                log.warn("⚠️ /vegetation 응답 body가 null입니다.");
+            }
+
             return CompletableFuture.completedFuture(response.getBody());
         } catch (Exception e) {
             log.error("❌ /vegetation 호출 실패", e);
