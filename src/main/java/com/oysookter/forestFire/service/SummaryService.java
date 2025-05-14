@@ -16,7 +16,7 @@ public class SummaryService {
 
     private final RestTemplate restTemplate = new RestTemplate();
 
-    private static final String BASE_URL = "http://172.30.1.87:8000";
+    private static final String BASE_URL = "https://oysooktergemini-491188530288.asia-northeast3.run.app";
 
     public double callFastApiForDamage(CoordinateRequest request) {
         try {
