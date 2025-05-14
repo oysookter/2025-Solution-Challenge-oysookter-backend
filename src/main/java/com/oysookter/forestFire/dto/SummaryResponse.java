@@ -8,7 +8,7 @@ public class SummaryResponse {
     private double lon;
     private double damage;
     private RecoveryInfo recovery;
-    private VegetationInfo vegetation;
+    private VegetationInfo vegetationInfo;
 
     @Data
     public static class RecoveryInfo {
@@ -22,7 +22,22 @@ public class SummaryResponse {
     @Data
     public static class VegetationInfo {
         private double ndvi;
-        private String explanation;
+        private Vegetation vegetation;
+
+        @Data
+        public static class Vegetation {
+            private String explanation;
+            private Plant veg1;
+            private Plant veg2;
+            private Plant veg3;
+        }
+
+        @Data
+        public static class Plant {
+            private String name;
+            private String text;
+            private String image;
+        }
     }
 }
 
