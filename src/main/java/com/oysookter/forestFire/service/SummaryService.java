@@ -27,12 +27,12 @@ public class SummaryService {
     public CompletableFuture<Double> callFastApiForDamage(CoordinateRequest request) {
         try {
             String url = String.format("%s/fire-damage?lat=%s&lon=%s", BASE_URL, request.getLat(), request.getLon());
-            log.info("🔥 호출: {}", url);
+            log.info("🔥 call: {}", url);
             ResponseEntity<DamageResponse> response = restTemplate.getForEntity(url, DamageResponse.class);
             double damage = response.getBody() != null ? response.getBody().getDamage() : -1;
             return CompletableFuture.completedFuture(damage);
         } catch (Exception e) {
-            log.error("❌ /damage 호출 실패", e);
+            log.error("❌ /damage call failed", e);
             return CompletableFuture.completedFuture(-1.0);
         }
     }
@@ -41,11 +41,11 @@ public class SummaryService {
     public CompletableFuture<RecoveryInfo> callFastApiForRecovery(CoordinateRequest request) {
         try {
             String url = String.format("%s/ndvi-recovery?lat=%s&lon=%s", BASE_URL, request.getLat(), request.getLon());
-            log.info("🔥 호출: {}", url);
+            log.info("🔥 call: {}", url);
             ResponseEntity<RecoveryInfo> response = restTemplate.getForEntity(url, RecoveryInfo.class);
             return CompletableFuture.completedFuture(response.getBody());
         } catch (Exception e) {
-            log.error("❌ /recovery 호출 실패", e);
+            log.error("❌ /recovery call failed", e);
             return CompletableFuture.completedFuture(null);
         }
     }
@@ -54,22 +54,22 @@ public class SummaryService {
     public CompletableFuture<VegetationInfo> callFastApiForVegetation(CoordinateRequest request) {
         try {
             String url = String.format("%s/vegetation?lat=%s&lon=%s", BASE_URL, request.getLat(), request.getLon());
-            log.info("🔥 호출: {}", url);
+            log.info("🔥 call: {}", url);
             ResponseEntity<VegetationInfo> response = restTemplate.getForEntity(url, VegetationInfo.class);
 
             if (response.getBody() != null) {
-                log.info("✅ /vegetation 응답: {}", objectMapper.writeValueAsString(response.getBody()));
+                log.info("✅ /vegetation response: {}", objectMapper.writeValueAsString(response.getBody()));
             } else {
-                log.warn("⚠️ /vegetation 응답 body가 null입니다.");
+                log.warn("⚠️ /vegetation response body is null.");
             }
 
             return CompletableFuture.completedFuture(response.getBody());
         } catch (Exception e) {
-            log.error("❌ /vegetation 호출 실패", e);
+            log.error("❌ /vegetation call failed", e);
             return CompletableFuture.completedFuture(null);
         }
     }
-    // 내부 클래스: FastAPI의 /damage 응답을 받기 위한 DTO
+
     private static class DamageResponse {
         private double lat;
         private double lon;

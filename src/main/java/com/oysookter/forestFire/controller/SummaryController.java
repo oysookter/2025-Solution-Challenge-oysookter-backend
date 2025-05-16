@@ -28,7 +28,7 @@ public class SummaryController {
         CompletableFuture<Double> damageFuture = summaryService.callFastApiForDamage(request);
         CompletableFuture<SummaryResponse.VegetationInfo> vegetationFuture = summaryService.callFastApiForVegetation(request);
 
-        // 모든 작업이 끝날 때까지 대기
+
         CompletableFuture.allOf(recoveryFuture, damageFuture, vegetationFuture).join();
 
         SummaryResponse response = new SummaryResponse();
